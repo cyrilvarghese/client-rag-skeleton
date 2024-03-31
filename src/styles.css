@@ -1,0 +1,459 @@
+/* styles.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --primary-color: #3498db;
+    /* Sophisticated enterprise-blue color */
+    --secondary-color: #2ecc71;
+    /* Fresh green color */
+    --background-light: #f9f9f9;
+    /* Light background color */
+    --background-white: #ffffff;
+    /* White background color */
+    --border-light: #dcdcdc;
+    /* Light grey border color */
+    --text-dark: #333;
+    /* Dark text color */
+    --text-light: #fff;
+    /* Light text color */
+    --error: rgb(213, 36, 36);
+
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: var(--background-light);
+}
+
+.enterprise-blue-button {
+    padding: 12px 20px;
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 20px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.enterprise-blue-button:hover {
+    background-color: #2980b9;
+}
+
+input[type="file"] {
+    padding: 12px;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    background-color: var(--background-white);
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+#fileListContainer {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+}
+
+#uploadForm {
+    margin-bottom: 20px;
+}
+
+.removeLink {
+    margin-left: 20px;
+    color: var(--error);
+
+}
+
+#fileList,
+#serverFileList {
+
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+}
+
+#urlListContainer {
+    list-style: none;
+    padding: 0px;
+}
+
+#urlListContainer li {
+    padding-bottom: 10px;
+}
+
+.pageInputs {
+    margin: 10px;
+}
+
+
+
+#fileListCount,
+#serverFileListCount {
+    text-align: center;
+    font-size: 18px;
+    color: var(--text-dark);
+}
+
+#selectableList {
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+}
+
+.selectableItem {
+    margin: 10px;
+    padding: 15px;
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.selectableItem.selected {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+}
+
+/* Modal styles */
+/* .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: var(--background-white);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+
+}
+
+#modalText {
+    overflow: auto;
+    height: 80%;
+} */
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+}
+
+.close:hover {
+    color: #555;
+}
+
+/* Add your modal styles here */
+#popupModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.listItemContainer {
+    padding-bottom: 10px;
+}
+
+.readMoreLink {
+    padding-left: 10px;
+
+}
+
+#modalContent {
+    background-color: var(--background-white);
+    padding: 30px;
+    padding-top: 80px;
+    border-radius: 10px;
+    text-align: left;
+    position: relative;
+    line-height: 150%;
+    top: 80px;
+    width: 40%;
+    height: 80vh;
+    margin: 0 auto;
+
+}
+
+#closeButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#closeButton:hover {
+    background-color: #2980b9;
+}
+
+#loader {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 1000;
+}
+
+.loader-icon {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -25px;
+    margin-left: -25px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#loaderText {
+    font-size: 16px;
+    margin-top: 10px;
+    text-align: center;
+    top: 43%;
+    position: absolute;
+    height: 80px;
+    left: 47%;
+    width: 100px;
+}
+
+.selectable-list-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.selectable-list-item {
+    margin-bottom: 5px;
+}
+
+/* .checkbox {
+    margin-right: 5px;
+} */
+
+.item-text {
+    font-size: 16px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    /* Adjust the number of lines */
+    -webkit-box-orient: vertical;
+    width: 300px;
+    max-height: 100px;
+    /* Adjust maximum height */
+    line-height: 20px;
+    /* Adjust line height for vertical centering */
+    white-space: normal;
+    text-overflow: ellipsis;
+    padding-left: 40px;
+}
+
+
+
+.fileItem,
+.serverFileItem {
+    @apply pt-4 pb-4 border-b border-neutral-200 bg-white flex justify-between items-center;
+}
+
+.removeButtonLink {
+    @apply text-error-500 hover:text-error-600 hover:underline font-semibold transition-colors duration-300;
+}
+
+.pageInputs {
+    @apply flex space-x-2 mt-2;
+}
+
+.pageInput {
+    @apply border border-gray-300 p-1 rounded text-gray-700;
+}
+
+.serverFileItem .truncate-text,
+.fileItem .truncate-text {
+    width: 200px;
+    /* Directly specifying width */
+    @apply inline-block truncate text-enterprise-blue-500 hover:underline;
+}
+
+.question-header {
+    @apply flex justify-between items-center mt-5;
+}
+
+.question-title {
+    @apply text-xl font-semibold text-gray-800;
+}
+
+.label-text {
+    @apply text-gray-700;
+}
+
+.number-input {
+    @apply ml-2 h-10 w-14 text-center border border-neutral-200;
+}
+
+.query-input {
+    @apply p-2 h-24 text-left border border-enterprise-blue-500 rounded-md mt-4 mb-4;
+}
+
+.submit-button {
+    @apply bg-enterprise-blue-500 hover:bg-enterprise-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-enterprise-blue-300;
+}
+
+
+.label-text {
+    @apply block mb-2 font-bold;
+}
+
+.json-response-textarea {
+    @apply w-full p-3 border-2 border-gray-300 rounded-md shadow-sm focus:border-enterprise-blue-300 focus:ring focus:ring-enterprise-blue-200 focus:ring-opacity-50;
+}
+
+.json-button,
+.capture-values-button,
+#addUrlButton,
+#uploadButton {
+    @apply px-4 py-2 rounded bg-enterprise-blue-500 text-white hover:bg-enterprise-blue-700 focus:outline-none focus:ring-2 focus:ring-enterprise-blue-300;
+}
+
+.json-button,
+#uploadButton,
+#addUrlButton {
+    @apply bg-enterprise-blue-300 mb-4
+}
+
+.card {
+    @apply bg-white p-6 rounded-lg shadow-md;
+}
+
+.form-input,
+.url-input {
+    @apply p-2.5 text-left border border-blue-500 rounded-md w-full;
+}
+
+
+
+.form-label {
+    @apply block mb-2 font-bold;
+}
+
+.form-section,
+.url-section {
+    @apply mb-2 mt-4;
+}
+
+.textarea-section {
+    @apply flex flex-col pb-5;
+}
+
+
+
+/* styles.css */
+.selectable-item {
+    @apply flex items-center p-4 border-b border-gray-200 last:border-b-0 hover:shadow-md cursor-pointer transition duration-300 ease-in-out;
+}
+
+.selectable-item.selected {
+    @apply bg-neutral-200 text-white;
+}
+
+.checkbox-wrapper {
+    @apply inline-flex items-center mr-4;
+}
+
+.item-text {
+    @apply flex-grow text-gray-800;
+}
+
+.read-more-link {
+    @apply text-blue-500 hover:text-blue-700 hover:underline;
+}
+
+/* Modal Backdrop */
+.modal-backdrop {
+    @apply fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50;
+}
+
+/* Modal Content */
+.modal-content {
+    @apply relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white;
+}
+
+/* Close Button */
+.close-button {
+    @apply absolute top-0 right-0 cursor-pointer p-4 text-gray-800 text-lg font-semibold;
+}
+
+/* Modal Text and Links */
+.modal-text {
+    @apply mb-4;
+}
+
+.modal-link {
+    @apply text-blue-500 hover:text-blue-700 underline block mb-2;
+}
+
+/* Last link in the modal might not need a bottom margin */
+.modal-link:last-child {
+    @apply mb-0;
+}
+
+.modal {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center;
+}
+
+.modal-content {
+    @apply bg-white p-6 rounded-lg shadow-lg text-center m-4;
+    /* m-4 ensures some margin around the modal content for small screens */
+}
+
+/* Tailwind CSS does not directly support custom properties for height via @apply, so #modalText's height is handled separately */
+#modalText {
+    @apply overflow-auto;
+    height: 80%;
+}
