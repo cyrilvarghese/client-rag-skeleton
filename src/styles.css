@@ -292,7 +292,7 @@ input[type="file"] {
     /* Adjust line height for vertical centering */
     white-space: normal;
     text-overflow: ellipsis;
-    padding-left: 40px;
+    padding-left: 16px;
 }
 
 
@@ -391,27 +391,37 @@ input[type="file"] {
     @apply flex flex-col pb-5;
 }
 
-
-
-/* styles.css */
+/* Define your styles in styles.css or similar */
 .selectable-item {
-    @apply flex items-center p-4 border-b border-gray-200 last:border-b-0 hover:shadow-md cursor-pointer transition duration-300 ease-in-out;
+    @apply flex flex-col mb-4 p-2 border border-gray-200 rounded-lg;
 }
 
-.selectable-item.selected {
-    @apply bg-neutral-200 text-white;
-}
-
-.checkbox-wrapper {
-    @apply inline-flex items-center mr-4;
-}
-
-.item-text {
-    @apply flex-grow text-gray-800;
+.top-container {
+    @apply flex items-center py-2 pl-2;
 }
 
 .read-more-link {
-    @apply text-blue-500 hover:text-blue-700 hover:underline;
+    @apply text-blue-500 hover:text-blue-700 hover:underline border-b border-gray-200 pl-9;
+}
+
+.checkbox {
+    @apply scale-125;
+}
+
+.item-text {
+    @apply flex-grow;
+}
+
+.tags-container {
+    @apply flex flex-wrap py-2 pl-9;
+}
+
+.tag-div {
+    @apply mr-2 mb-2;
+}
+
+.tag {
+    @apply text-white text-sm font-medium p-1 rounded capitalize;
 }
 
 /* Modal Backdrop */

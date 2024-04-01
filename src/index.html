@@ -41,11 +41,13 @@
                     <button type="button" id="uploadButton" class="blue-button mt-4">+ Add Files To Source</button>
                 </form>
 
-                <h2 class="url-section text-lg font-bold">Add Web URLs</h2>
-                <div class="textarea-section">
-                    <textarea rows="3" id="urlInput" class="url-input mt-2"
-                        placeholder="Add a URL">https://www.nngroup.com/articles/user-interviews/</textarea>
-                    <button id="addUrlButton" class="blue-button mt-4">+ Add from Web</button>
+                <div style="display:none">
+                    <h2 class="url-section text-lg font-bold">Add Web URLs</h2>
+                    <div class="textarea-section">
+                        <textarea rows="3" id="urlInput" class="url-input mt-2"
+                            placeholder="Add a URL">https://www.nngroup.com/articles/user-interviews/</textarea>
+                        <button id="addUrlButton" class="blue-button mt-4">+ Add from Web</button>
+                    </div>
                 </div>
             </div>
             <div class="card mt-5">
@@ -69,11 +71,11 @@
                     <h2 class="question-title">Query</h2>
                     <div class="flex justify-center items-baseline">
                         <label for="numericInput" class="label-text"># of results</label>
-                        <input id="numericInput" type="number" value="5" class="number-input">
+                        <input id="numericInput" type="number" value="20" class="number-input">
                     </div>
                 </div>
-                <textarea id="queryInput" class="query-input w-full">how do i conduct good user interviews ?
-            </textarea>
+                <textarea id="queryInput" class="query-input w-full">what is the report about ?
+                </textarea>
 
                 <button id="sendQueryButton" class="submit-button">
                     Submit Query
@@ -83,7 +85,7 @@
         </div>
         <!-- Second Column (Selectable List) -->
 
-        <div style="width: 33%; padding: 20px" id="selectableListContainer">
+        <div style="width: 70%; padding: 20px" id="selectableListContainer">
             <h2 class="mb-5 mt-10 text-lg font-bold">Relevant Snippets</h2>
             <ul id="selectableList"></ul>
             <!-- Log for selection changes -->
@@ -91,7 +93,7 @@
         </div>
         <!-- Third Column (Results Container) -->
 
-        <div id="resultsContainer" class="w-1/3 p-5">
+        <div id="resultsContainer" class="w-1/3 p-5 hidden">
             <div class="card">
                 <h2 class="mb-5 mt-5 text-lg font-bold">LLM Configuration</h2>
 
@@ -126,6 +128,8 @@
 
             </div>
         </div>
+
+
     </div>
 
 </body>

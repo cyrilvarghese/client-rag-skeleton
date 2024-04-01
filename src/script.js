@@ -1,7 +1,6 @@
 // scripts.js
 import { openModal, closeModal } from './modal.js';
 import { addURL, getWebURLs } from './urlHandle.js';
-import { extractFileInfo } from './extractFileInfo.js'
 import { showFormattedJsonPopup } from './jsonFormatterModule.js';
 import './styles.css';
 
@@ -13,8 +12,7 @@ let selectedItemsContent = [];
 // Array to store currently selected options
 let selectedOptions = [];
 
-
-
+const baseURL = 'http://localhost:8000';
 
 
 function createFileItem(file, index, elementId, countElementId) {
@@ -27,25 +25,6 @@ function createFileItem(file, index, elementId, countElementId) {
     fileNameSpan.href = file.path;
     fileNameSpan.target = '_blank';
     listItem.appendChild(fileNameSpan);
-
-    if (listItem.className !== 'serverFileItem') {
-        const pageInputsDiv = document.createElement('div');
-        pageInputsDiv.className = 'pageInputs';
-
-        const fromPageInput = document.createElement('input');
-        fromPageInput.type = 'number';
-        fromPageInput.placeholder = 'Page From';
-        fromPageInput.className = 'pageInput';
-        pageInputsDiv.appendChild(fromPageInput);
-
-        const toPageInput = document.createElement('input');
-        toPageInput.type = 'number';
-        toPageInput.placeholder = 'Page To';
-        toPageInput.className = 'pageInput';
-        pageInputsDiv.appendChild(toPageInput);
-
-        listItem.appendChild(pageInputsDiv);
-    }
 
     const removeButton = document.createElement('button');
     removeButton.textContent = 'Remove';
@@ -69,7 +48,7 @@ function createFileItem(file, index, elementId, countElementId) {
 
 async function deleteFile(filename) {
     try {
-        const response = await fetch(`http://localhost:8000/api/files/delete?filename=${encodeURIComponent(filename)}`, {
+        const response = await fetch(`${baseURL}/api/files/delete?filename=${encodeURIComponent(filename)}`, {
             method: 'DELETE'
         });
         if (response.ok) {
@@ -133,27 +112,54 @@ function updateSelectableList() {
 function logSelection() {
     document.getElementById('selectionLog').textContent = `Selection Log: ${JSON.stringify(selectedItems)}`;
 }
-function createSelectableList(data) {
+
+async function fetchTagsConfig() {
+    return fetch(baseURL + '/uploads/tag_description_mapping.json')
+        .then(response => response.json())
+        .catch(error => console.error('Error fetching tags config:', error));
+}
+
+function createSelectableList(data, tagsConfig) {
     const container = document.getElementById('selectableList');
     container.innerHTML = "";
-    data.forEach(item => {
-        // Create list item container
-        const listItem = document.createElement('div');
-        listItem.classList.add('selectable-item');
 
-        // Create checkbox
+    data.forEach(item => {
+        const listItem = document.createElement('div');
+        listItem.className = 'selectable-item';
+
+        const topContainer = document.createElement('div');
+        topContainer.className = 'top-container';
+
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.classList.add('checkbox');
-        checkbox.classList.add('scale-125');
-        listItem.appendChild(checkbox);
+        checkbox.className = 'checkbox';
+        topContainer.appendChild(checkbox);
 
-        // Create item text
         const itemText = document.createElement('p');
-        itemText.classList.add('item-text');
-        itemText.textContent = item.page_content // Displaying the first 100 characters
-        listItem.appendChild(itemText);
+        itemText.className = 'item-text';
+        itemText.textContent = item.page_content;
+        topContainer.appendChild(itemText);
 
+        listItem.appendChild(topContainer);
+
+        const tagsContainer = document.createElement('div');
+        tagsContainer.className = 'tags-container';
+
+        const itemTags = JSON.parse(item.metadata.tags);
+        itemTags.forEach(tagName => {
+            const tag = tagsConfig.find(t => t.tag_name === tagName);
+            if (tag) {
+                const tagDiv = document.createElement('div');
+                tagDiv.className = 'tag-div';
+
+                const tagElement = document.createElement('span');
+                tagElement.className = 'tag ' + colorMapping[tagName]; // Tailwind classes + dynamic bg color
+                tagElement.textContent = tag.tag_name;
+
+                tagDiv.appendChild(tagElement);
+                tagsContainer.appendChild(tagDiv);
+            }
+        });
         // Create "Read More" link
         const readMoreLink = document.createElement('a');
         readMoreLink.href = '#';
@@ -169,6 +175,8 @@ function createSelectableList(data) {
             openModal(item); // Replace this with your popup/modal display logic
         });
 
+
+
         // Attach click event listener to item text
         itemText.addEventListener('click', function () {
             // Toggle checkbox state
@@ -183,11 +191,39 @@ function createSelectableList(data) {
             // Toggle item highlight based on checkbox state
             toggleHighlight(listItem, checkbox.checked);
         });
-
+        listItem.appendChild(tagsContainer);
         // Append list item to container
         container.appendChild(listItem);
     });
 }
+
+function createColorMappingFromJson(jsonData) {
+    const colors = ["bg-green-900", "bg-blue-500", "bg-green-600", "bg-yellow-700", "bg-red-500"];
+    const colorMapping = {};
+
+    jsonData.forEach((item, index) => {
+        // Cycle through the colors array if more tags than colors
+        const color = colors[index % colors.length];
+        colorMapping[item.tag_name] = color;
+    });
+
+    return colorMapping;
+}
+
+
+
+
+function getTagColor(tagName) {
+    const colorClasses = {
+        "financial-performance": "bg-red-700",
+        "strategic-initiatives": "bg-red-700",
+        "operational-efficiency": "bg-red-700",
+        "market-insights": "bg-yellow-800",
+        "confidential-strategies": "bg-red-400"
+    };
+    return colorClasses[tagName] || 'bg-gray-200'; // Default color
+}
+
 function toggleHighlight(selectedItem, isChecked) {
     // Toggle highlight based on checkbox state
     if (isChecked) {
@@ -227,7 +263,7 @@ function toggleSelection(index) {
 export async function loadUrls() {
     try {
         const urls = getWebURLs();
-        const response = await fetch('http://localhost:8000/api/load-urls', {
+        const response = await fetch(`${baseURL}/api/load-urls`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -265,7 +301,7 @@ export async function captureValues() {
     }));
 
     try {
-        const response = await fetch('http://localhost:8000/api/answer', {
+        const response = await fetch(baseURL + '/api/answer', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -376,7 +412,7 @@ document.getElementById('fileInput').addEventListener('change', (event) => {
 // Fetch file list from the server and update the UI
 export async function fetchFileList() {
     try {
-        const response = await fetch('http://localhost:8000/api/files');
+        const response = await fetch(baseURL + '/api/files');
         const data = await response.json();
 
         // Update the file list on the UI
@@ -388,7 +424,7 @@ export async function fetchFileList() {
 
 // Fetch the initial file list when the page loads
 fetchFileList();
-
+let colorMapping = {}
 // Function to send a query to the server
 export async function sendQuery() {
     selectedOptions = []//clear
@@ -408,7 +444,7 @@ export async function sendQuery() {
 
     try {
         // Assume your API endpoint for fetching JSON data is 'http://example.com/api/query'
-        const response = await fetch('http://localhost:8000/api/query', {
+        const response = await fetch(baseURL + '/api/query', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -418,7 +454,10 @@ export async function sendQuery() {
 
         // Update the selectable list with the new data
         console.log(jsonData);
-        createSelectableList(jsonData);
+        let tagMapping = await fetchTagsConfig();
+        colorMapping = createColorMappingFromJson(tagMapping);
+        console.log(colorMapping);
+        createSelectableList(jsonData, tagMapping);
 
         //renderSelectableList(jsonData);
     } catch (error) {
@@ -438,16 +477,8 @@ export async function uploadFiles() {
             formData.append('pdf_files', file);
         });
 
-        const fileItems = document.querySelectorAll('.fileItem');
-        const filesInfo = extractFileInfo(fileItems);
-        // const filesInfo = [
 
-        //     { "filename": "forms.pdf", "from_page": 7, "to_page": 178 }
-        // ]
-        formData.append('files_data', JSON.stringify(filesInfo))
-        // Handle the form data as needed (e.g., post it to the server)
-        // Replace the placeholder URL with your actual server endpoint
-        fetch('http://localhost:8000/api/upload', {
+        fetch(baseURL + '/api/upload', {
             method: 'POST',
             body: formData,
         })
